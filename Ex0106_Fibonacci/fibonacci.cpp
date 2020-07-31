@@ -56,10 +56,9 @@ void fibonacci2(int n)
 // The third algorithm that use recursion with complexity O(2^n)
 int fibonacci3(int n)
 {
-	if (n <= 0)
+	if (n > 2)
 	{
-		cerr << "The input must be a positive integer." << endl;
-		return 0;
+		return fibonacci3(n - 1) + fibonacci3(n - 2);
 	}
 	else if (n == 1)
 	{
@@ -71,7 +70,8 @@ int fibonacci3(int n)
 	}
 	else
 	{
-		return fibonacci3(n - 1) + fibonacci3(n - 2);
+		cerr << "The input must be a positive integer." << endl;
+		return 0;
 	}
 }
 
