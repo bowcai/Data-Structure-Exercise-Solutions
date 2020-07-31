@@ -28,8 +28,8 @@ a\+b\*c
 a 2  
 b 7  
 c 5  
+
 Output Sample:  
-输出示例：  
 abc\*\+  
 &nbsp;&nbsp;&nbsp;\+  
 &nbsp;&nbsp;/&nbsp;\\  
