@@ -77,8 +77,8 @@ int fibonacci3(int n)
 
 int main(void)
 {
-	int test_times = 100000;
-	int n_fibonacci = 25;
+	const int test_times = 100000;
+	const int n_fibonacci = 25;
 	
 	time_t time1_start = clock();
 	// Test for multiple times
@@ -87,7 +87,8 @@ int main(void)
 		fibonacci1(n_fibonacci);
 	}
 	time_t time1_end = clock();
-	cout << "Total run time for algorithm 1 is " << (time1_end - time1_start) << " ms" << endl;
+	cout << "Total run time for algorithm 1 is " 
+		<< (time1_end - time1_start) << " ms" << endl;
 
 	time_t time2_start = clock();
 	// Test for multiple times
@@ -96,7 +97,8 @@ int main(void)
 		fibonacci2(n_fibonacci);
 	}
 	time_t time2_end = clock();
-	cout << "Total run time for algorithm 2 is " << (time2_end - time2_start) << " ms" << endl;
+	cout << "Total run time for algorithm 2 is " 
+		<< (time2_end - time2_start) << " ms" << endl;
 
 	time_t time3_start = clock();
 	// Test for multiple times
@@ -105,7 +107,8 @@ int main(void)
 		fibonacci3(n_fibonacci);
 	}
 	time_t time3_end = clock();
-	cout << "Total run time for algorithm 3 is " << (time3_end - time3_start) << " ms" << endl;
+	cout << "Total run time for algorithm 3 is " 
+		<< (time3_end - time3_start) << " ms" << endl;
 
 	return 0;
 }
