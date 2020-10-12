@@ -62,7 +62,7 @@ int main(void)
 	cout << "Enter a string:" << endl;
 	getline(cin, S);
 	int MaxSymLen = longest_symmetric(S);
-	cout << "The longest symmetry substring's length is" << endl;
+	cout << "The longest symmetry substring's length is ";
 	cout << MaxSymLen << endl;
 
 	return 0;

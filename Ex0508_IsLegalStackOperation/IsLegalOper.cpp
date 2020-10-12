@@ -41,8 +41,7 @@ int main(void)
 	cin >> N >> M;
 
 	// Clean the buffer
-	string clean;
-	getline(cin, clean);
+	cin.ignore(1024, '\n');
 
 	vector<string> Strings;
 	for (int i = 0; i < N; i++)
