@@ -1,22 +1,6 @@
 import java.util.Stack;
 
 public class Maze {
-    public static void main(String[] args) {
-        final int m = 8, n = 7;
-        final double prob = 0.7;
-        Maze maze = new Maze(m, n, prob);
-        maze.showMaze();
-
-        if(maze.getRoutine()) {
-            System.out.println("There is a solution :)");
-            maze.showRoutine();
-            maze.showMapRoutine();
-        }
-        else {
-            System.out.println("There is no solution :(");
-        }
-    }
-
     private final int xLen, yLen;
 
     // Probability of an open path
@@ -44,13 +28,17 @@ public class Maze {
         initial();
     }
 
+    public int randomBlock() {
+        return Math.random() > openProb ? 1 : 0;
+    }
+
     public void initial() {
         mazeMap = new int[xLen][yLen];
         pass = new int[xLen][yLen];
 
         for (int i = 0; i < xLen; i++) {
             for (int j = 0; j < yLen; j++) {
-                mazeMap[i][j] = Math.random() > openProb ? 1 : 0;
+                mazeMap[i][j] = randomBlock();
             }
         }
         mazeMap[0][0] = 0;
@@ -180,5 +168,23 @@ public class Maze {
 
         System.out.println("Showing the routine in map:");
         showMaze(mazeMapCopy);
+    }
+}
+
+class TestMaze {
+    public static void main(String[] args) {
+        final int m = 8, n = 7;
+        final double prob = 0.7;
+        Maze maze = new Maze(m, n, prob);
+        maze.showMaze();
+
+        if(maze.getRoutine()) {
+            System.out.println("There is a solution :)");
+            maze.showRoutine();
+            maze.showMapRoutine();
+        }
+        else {
+            System.out.println("There is no solution :(");
+        }
     }
 }

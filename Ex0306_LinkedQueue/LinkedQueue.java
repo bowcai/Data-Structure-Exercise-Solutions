@@ -1,17 +1,5 @@
 
-public class LinkedQueue {
-    public static void main(String[] args) {
-        MyLinkedQueue<Integer> myQueue = new MyLinkedQueue<>(
-                new Integer[]{3,2,5,4,1,3,6}
-        );
-
-        while(!myQueue.isEmpty()) {
-            System.out.println("Dequeuing: " + myQueue.dequeue());
-        }
-    }
-}
-
-class MyLinkedQueue<E> {
+public class LinkedQueue<E> {
     node<E> tail;
 
     public static class node<E> {
@@ -50,11 +38,11 @@ class MyLinkedQueue<E> {
         }
     }
 
-    public MyLinkedQueue() {
+    public LinkedQueue() {
         makeEmpty();
     }
 
-    public MyLinkedQueue(E[] inputArray) {
+    public LinkedQueue(E[] inputArray) {
         this();
 
         for (E e: inputArray) {
@@ -96,5 +84,17 @@ class MyLinkedQueue<E> {
         }
 
         return x;
+    }
+}
+
+class TestLinkedList {
+    public static void main(String[] args) {
+        LinkedQueue<Integer> myQueue = new LinkedQueue<>(
+                new Integer[]{3,2,5,4,1,3,6}
+        );
+
+        while(!myQueue.isEmpty()) {
+            System.out.println("Dequeuing: " + myQueue.dequeue());
+        }
     }
 }

@@ -32,9 +32,10 @@ public:
 
 	Maze(int, int, double);
 	~Maze();
-	void initial(void);
+	int randomBlock(void);
+	void initialBlocks(void);
 	void showMaze(void);
-	int CanStep(int, int);
+	int canStep(int, int);
 	int getRoutine(void);
 	void showRoutine(void);
 	void showMapRoutine(void);
@@ -45,31 +46,32 @@ private:
 
 Maze::Maze(int m, int n, double prob) 
 	:x_len(m), y_len(n), open_prob(prob)
+	, maze_map(x_len, vector<int>(y_len))
+	, pass(x_len, vector<int>(y_len, 0))
 {
-	initial();
+	initialBlocks();
+	maze_map[0][0] = 0;
+	maze_map[x_len - 1][y_len - 1] = 0;
 }
 
 Maze::~Maze()
 {
 }
 
-void Maze::initial(void)
+int Maze::randomBlock(void)
 {
-	maze_map.resize(x_len);
-	pass.resize(x_len);
-	for (int i = 0; i < x_len; i++)
+	return (double)rand() / RAND_MAX > open_prob ? 1 : 0;
+}
+
+void Maze::initialBlocks(void)
+{
+	for (auto& i: maze_map)
 	{
-		maze_map[i].resize(y_len);
-		pass[i].resize(y_len);
-		for (int j = 0; j < y_len; j++)
+		for (auto& j: i)
 		{
-			maze_map[i][j] 
-				= (double)rand() / RAND_MAX > open_prob;
-			pass[i][j] = 0;
+			j = randomBlock();
 		}
 	}
-	maze_map[0][0] = 0;
-	maze_map[x_len - 1][y_len - 1] = 0;
 }
 
 void Maze::showMaze(void)
@@ -94,7 +96,7 @@ void Maze::showMaze(void)
 }
 
 // Check the accessibility of next step
-int Maze::CanStep(int x, int y)
+int Maze::canStep(int x, int y)
 {
 	if (x < 0 || x >= x_len 
 		|| y < 0 || y >= y_len)
@@ -126,7 +128,7 @@ int Maze::getRoutine(void)
 		while (i < directions.size())
 		{
 			// If one direction is available, then take a step
-			if (CanStep(x + directions[i][0], 
+			if (canStep(x + directions[i][0], 
 				y + directions[i][1]))
 			{
 				break;
