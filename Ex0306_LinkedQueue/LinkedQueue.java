@@ -45,8 +45,10 @@ public class LinkedQueue<E> {
     public LinkedQueue(E[] inputArray) {
         this();
 
-        for (E e: inputArray) {
-            enqueue(e);
+        if (inputArray != null) {
+            for (E e: inputArray) {
+                enqueue(e);
+            }
         }
     }
 

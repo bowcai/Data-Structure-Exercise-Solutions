@@ -46,6 +46,9 @@ public class Maze {
     }
 
     public static void showMaze(int[][] mazeMap) {
+        if (mazeMap == null) {
+            throw new NullPointerException();
+        }
         for (int[] i: mazeMap) {
             for (int j: i) {
                 System.out.print(mapSymbols[j]);
