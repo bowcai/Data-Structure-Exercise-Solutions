@@ -56,6 +56,7 @@ class MyLinkedList<E> {
     public MyLinkedList() { }
 
     public MyLinkedList(E[] inputArray) {
+        this();
         buildList(inputArray);
     }
 
@@ -78,11 +79,17 @@ class MyLinkedList<E> {
     }
 
     public void insert(E x, node<E> p) {
+        if (x == null || p == null) {
+            throw new NullPointerException();
+        }
         node<E> tmpNode = new node<>(x, p.next);
         p.setNext(tmpNode);
     }
 
-    public void buildList(final E[] inputArray) {
+    public void buildList(E[] inputArray) {
+        if (inputArray == null) {
+            throw new NullPointerException();
+        }
         makeEmpty();
         node<E> last = head;
         for (E e: inputArray) {

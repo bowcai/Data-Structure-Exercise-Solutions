@@ -25,7 +25,7 @@ class SeqList<E> {
         emptyList();
     }
 
-    public SeqList(final E[] inArray) {
+    public SeqList(E[] inArray) {
         buildList(inArray);
     }
 
@@ -34,12 +34,15 @@ class SeqList<E> {
         this.comparator = comparator;
     }
 
-    public SeqList(final E[] inArray, Comparator<E> comparator) {
+    public SeqList(E[] inArray, Comparator<E> comparator) {
         this(inArray);
         this.comparator = comparator;
     }
 
-    public void buildList(final E[] inArray) {
+    public void buildList(E[] inArray) {
+        if (inArray == null) {
+            throw new NullPointerException();
+        }
         int n = Math.min(inArray.length, MAX_SIZE);
         System.arraycopy(inArray, 0, elem, 0, n);
         last = n - 1;
@@ -72,6 +75,9 @@ class SeqList<E> {
     }
 
     public SeqList<E> unionList(SeqList<E> l2) {
+        if (l2 == null) {
+            throw new NullPointerException();
+        }
         SeqList<E> rslt = new SeqList<>();
 
         int i = 0, j = 0;
