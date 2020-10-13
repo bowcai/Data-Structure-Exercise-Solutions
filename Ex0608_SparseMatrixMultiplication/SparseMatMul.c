@@ -117,7 +117,7 @@ SPVector* SP_multiply(const SPMatrix* A, const SPVector* b)
 			bk = 0;
 			continue;
 		}
-		if (A->data[Ak].j < b->data[bk].i)
+		if (bk == b->tu || A->data[Ak].j < b->data[bk].i)
 		{
 			Ak++;
 			continue;
