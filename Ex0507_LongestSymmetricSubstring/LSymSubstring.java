@@ -10,7 +10,10 @@ public class LSymSubstring {
                 + longestSymmetric(s));
     }
 
-    public static int longestSymmetric(final String s) {
+    public static int longestSymmetric(String s) {
+        if (s == null) {
+            throw new NullPointerException();
+        }
         int maxSymLen = 0;
         int fore, back, symLen;
         for (int i = 0; i < s.length(); i++) {

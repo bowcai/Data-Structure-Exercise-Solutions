@@ -27,7 +27,10 @@ public class IsLegalOper {
         }
     }
 
-    public static boolean isLegal(final String s, int m) {
+    public static boolean isLegal(String s, int m) {
+        if (s == null) {
+            throw new NullPointerException();
+        }
         int currentSize = 0;
         for (int i = 0; i < s.length(); i++) {
             switch (s.charAt(i)) {
