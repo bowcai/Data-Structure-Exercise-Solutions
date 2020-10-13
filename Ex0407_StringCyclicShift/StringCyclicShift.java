@@ -26,7 +26,10 @@ public class StringCyclicShift {
         }
     }
 
-    public static int[] getNext(final String t) {
+    public static int[] getNext(String t) {
+        if (t == null) {
+            throw new NullPointerException();
+        }
         int[] next = new int[t.length()];
         next[0] = -1;
 
@@ -49,7 +52,11 @@ public class StringCyclicShift {
     }
 
 
-    public static int kmp(final String s, final String t) {
+    public static int kmp(String s, String t) {
+        if (s == null || t == null) {
+            throw new NullPointerException();
+        }
+
         // find number of string t in string s
         int[] next = getNext(t);
 
@@ -80,7 +87,11 @@ public class StringCyclicShift {
     }
 
 
-    public static boolean isShift(final String s, final String t) {
+    public static boolean isShift(String s, String t) {
+        if (s == null || t == null) {
+            throw new NullPointerException();
+        }
+
         if (s.length() == 0 || s.length() != t.length()) {
             return false;
         }
@@ -91,7 +102,10 @@ public class StringCyclicShift {
     }
 
     public static boolean isShiftUsingContains(
-            final String s, final String t) {
+            String s, String t) {
+        if (s == null || t == null) {
+            throw new NullPointerException();
+        }
         if (s.length() == 0 || s.length() != t.length()) {
             return false;
         }

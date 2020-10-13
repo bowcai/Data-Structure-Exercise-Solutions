@@ -7,7 +7,10 @@ public class StringToInteger {
         System.out.println("Translated integer: " + num);
     }
 
-    public static int myAtoi(final String s) {
+    public static int myAtoi(String s) {
+        if (s == null) {
+            throw new NullPointerException();
+        }
         int rslt = 0;
         int sign = 1;
         int i = 0;
