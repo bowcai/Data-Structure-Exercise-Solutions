@@ -20,20 +20,11 @@ void MagicSquare(int m)
 	if (m % 2 == 0)
 	{
 		cerr << "The function can only handle"
-			<<" odd-order magic squrare." << endl;
+			<<" odd-order magic square." << endl;
 		exit(1);
 	}
 	
-	vector<vector<int> > magic;
-	magic.resize(m);
-	for (auto& magici : magic)
-	{
-		magici.resize(m);
-		for (auto& magicij : magici)
-		{
-			magicij = 0;
-		}
-	}
+	vector<vector<int> > magic(m, vector<int>(m, 0));
 
 	int i = 0, j = (m - 1) / 2;
 	int i_next, j_next;

@@ -88,6 +88,8 @@ void show_vector(const SPVector* a)
 	}
 }
 
+// Caution: The matrix A and vector b should be sorted
+// according to the row and column indices before multiply
 SPVector* SP_multiply(const SPMatrix* A, const SPVector* b)
 {
 	if (A->nu != b->mu)
