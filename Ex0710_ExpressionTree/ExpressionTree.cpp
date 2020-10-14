@@ -66,15 +66,15 @@ Tree CreateTree(ElementType x)
 {
 	Tree T = new TreeNode;
 	T->data = x;
-	T->Left = NULL;
-	T->Right = NULL;
+	T->Left = nullptr;
+	T->Right = nullptr;
 	T->Height = 0;
 	return T;
 }
 
 void DelTree(Tree T)
 {
-	if (T == NULL)
+	if (T == nullptr)
 	{
 		return;
 	}
@@ -100,7 +100,7 @@ string ToPostfix(string S)
 	for (char& c : S)
 	{
 		if ((c >= 'a' && c <= 'z')
-			|| (c >= 'A' && c <= 'z'))
+			|| (c >= 'A' && c <= 'Z'))
 		{
 			postfix += c;
 		}
@@ -236,7 +236,7 @@ Tree PostfixToTree(string postfix)
 			{
 				cout << "Postfix is illegal and cannot convert to tree."
 					<< endl;
-				return NULL;
+				return nullptr;
 			}
 			Tree right = nodes.top();
 			nodes.pop();
@@ -251,7 +251,7 @@ Tree PostfixToTree(string postfix)
 	{
 		cout << "Postfix is illegal and cannot convert to tree."
 			<< endl;
-		return NULL;
+		return nullptr;
 	}
 
 	return nodes.top();
@@ -304,7 +304,7 @@ void PrintTree(const Tree T)
 		s1 += current.node->data;
 		coord1 = current.coordinate + 1;
 		
-		if (current.node->Left != NULL)
+		if (current.node->Left != nullptr)
 		{
 			nodes.push({ current.node->Left, current.layer - 1
 				, current.coordinate - (1 << (current.layer - 1)) });
@@ -317,7 +317,7 @@ void PrintTree(const Tree T)
 			coord2 = current.coordinate;
 		}
 		
-		if (current.node->Right != NULL)
+		if (current.node->Right != nullptr)
 		{
 			nodes.push({ current.node->Right, current.layer - 1
 				, current.coordinate + (1 << (current.layer - 1)) });

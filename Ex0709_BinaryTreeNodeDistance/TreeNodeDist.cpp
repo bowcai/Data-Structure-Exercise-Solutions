@@ -12,22 +12,22 @@ struct TreeNode
 	ElementType data;
 	Tree Left;
 	Tree Right;
-	Tree Father;
+	Tree Parent;
 };
 
 Tree CreateTree(ElementType x)
 {
 	Tree T = new TreeNode;
 	T->data = x;
-	T->Left = NULL;
-	T->Right = NULL;
-	T->Father = NULL;
+	T->Left = nullptr;
+	T->Right = nullptr;
+	T->Parent = nullptr;
 	return T;
 }
 
 void DelTree(PtrToNode T)
 {
-	if (T == NULL)
+	if (T == nullptr)
 	{
 		return;
 	}
@@ -41,13 +41,13 @@ void DelTree(PtrToNode T)
 // Direction=1 means insert into right
 PtrToNode Insert(ElementType x, PtrToNode p, int direction)
 {
-	if (p == NULL)
+	if (p == nullptr)
 	{
 		cout << "Error in inserting." << endl;
-		return NULL;
+		return nullptr;
 	}
 	PtrToNode temp = CreateTree(x);
-	temp->Father = p;
+	temp->Parent = p;
 	if (direction == 0)
 	{
 		p->Left = temp;
@@ -61,7 +61,7 @@ PtrToNode Insert(ElementType x, PtrToNode p, int direction)
 
 int Distance(PtrToNode a, PtrToNode b)
 {
-	if (a == NULL || b == NULL)
+	if (a == nullptr || b == nullptr)
 	{
 		cout << "Error in computing distance." << endl;
 		return -1;
@@ -70,11 +70,11 @@ int Distance(PtrToNode a, PtrToNode b)
 	stack<PtrToNode> a_ancestor;
 	stack<PtrToNode> b_ancestor;
 	PtrToNode current;
-	for (current = a; current != NULL; current = current->Father)
+	for (current = a; current != nullptr; current = current->Parent)
 	{
 		a_ancestor.push(current);
 	}
-	for (current = b; current != NULL; current = current->Father)
+	for (current = b; current != nullptr; current = current->Parent)
 	{
 		b_ancestor.push(current);
 	}
