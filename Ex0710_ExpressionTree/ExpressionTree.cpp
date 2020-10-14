@@ -3,6 +3,7 @@
 #include <stack>
 #include <queue>
 #include <string>
+#include <unordered_map>
 using namespace std;
 
 typedef char ElementType;
@@ -18,25 +19,18 @@ struct TreeNode
 	int Height;
 };
 
-struct dictionary
-{
-	char key;
-	int data;
-};
-
 Tree CreateTree(ElementType x);
 void DelTree(Tree T);
 Tree CombineTree(ElementType x, const Tree L, const Tree R);
 string ToPostfix(string S);
-int GetValue(const vector<dictionary>& dict, char k);
-int ComputePostfix(string postfix, const vector<dictionary>& dict);
+int ComputePostfix(string postfix, const unordered_map<char, int>& dict);
 Tree PostfixToTree(string postfix);
 void PrintTree(const Tree T);
 
 int main(void)
 {
 	int n_variable;
-	vector<dictionary> variables;
+	unordered_map<char, int> variables;
 	string infix;
 
 	// Get input
@@ -44,10 +38,11 @@ int main(void)
 	cin >> n_variable;
 	for (int i = 0; i < n_variable; i++)
 	{
-		dictionary temp;
-		cin >> temp.key;
-		cin >> temp.data;
-		variables.push_back(temp);
+		char key;
+		int value;
+		cin >> key;
+		cin >> value;
+		variables[key] = value;
 	}
 
 	cout << endl << "Output:" << endl;
@@ -153,21 +148,7 @@ string ToPostfix(string S)
 	return postfix;
 }
 
-int GetValue(const vector<dictionary>& dict, char k)
-{
-	for (auto& d : dict)
-	{
-		if (d.key == k)
-		{
-			return d.data;
-		}
-	}
-
-	cout << "Cannot find the value." << endl;
-	return 0;
-}
-
-int ComputePostfix(string postfix, const vector<dictionary>& dict)
+int ComputePostfix(string postfix, const unordered_map<char, int>& dict)
 {
 	stack<int> numbers;
 	for (char& c : postfix)
@@ -175,7 +156,7 @@ int ComputePostfix(string postfix, const vector<dictionary>& dict)
 		if ((c >= 'a' && c <= 'z')
 			|| (c >= 'A' && c <= 'Z'))
 		{
-			numbers.push(GetValue(dict, c));
+			numbers.push(dict.at(c));
 		}
 		else if (c == '+' || c == '-' || c == '*' || c == '/')
 		{
