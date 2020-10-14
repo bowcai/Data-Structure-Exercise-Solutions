@@ -249,7 +249,7 @@ void Maze::showMapRoutine(void)
 
 int main(void)
 {
-	srand((unsigned)time(NULL));
+	srand((unsigned)time(nullptr));
 	int m = 8, n = 7;
 	double prob = 0.70;
 	Maze maze1(m, n, prob);
