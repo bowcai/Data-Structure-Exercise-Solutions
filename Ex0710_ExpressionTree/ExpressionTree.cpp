@@ -8,20 +8,26 @@
 using namespace std;
 
 template <typename T>
+class TreeNode;
+
+template <typename T>
+using Tree = shared_ptr<TreeNode<T> >;
+
+template <typename T>
 class TreeNode
 {
 public:
 	T data;
-	shared_ptr<TreeNode<T> > Left;
-	shared_ptr<TreeNode<T> > Right;
+	Tree<T> Left;
+	Tree<T> Right;
 	int Height;
 
 	// Create a new tree
 	TreeNode(T);
 
 	// Combine two trees with a new root node
-	TreeNode(T, const shared_ptr<TreeNode<T> >&
-		, const shared_ptr<TreeNode<T> >&);
+	TreeNode(T, const Tree<T>&
+		, const Tree<T>&);
 
 	void show(void);
 };
@@ -29,7 +35,7 @@ public:
 string ToPostfix(string S);
 int ComputePostfix(string postfix
 	, const unordered_map<char, int>& dict);
-shared_ptr<TreeNode<char> > PostfixToTree(string postfix);
+Tree<char> PostfixToTree(string postfix);
 
 int main(void)
 {
@@ -52,7 +58,7 @@ int main(void)
 	cout << endl << "Output:" << endl;
 	string postfix = ToPostfix(infix);
 	cout << postfix << endl;
-	shared_ptr<TreeNode<char> > T = PostfixToTree(postfix);
+	Tree<char> T = PostfixToTree(postfix);
 	T->show();
 	cout << ComputePostfix(postfix, variables) << endl;
 
@@ -66,8 +72,8 @@ TreeNode<T>::TreeNode(T data) : data(data), Left(nullptr)
 }
 
 template <typename T>
-TreeNode<T>::TreeNode(T data, const shared_ptr<TreeNode<T> >& Left
-	, const shared_ptr<TreeNode<T> >& Right)
+TreeNode<T>::TreeNode(T data, const Tree<T>& Left
+	, const Tree<T>& Right)
 	: data(data), Left(Left), Right(Right)
 {
 	int leftHeight = Left ? Left->Height : -1;
@@ -81,7 +87,7 @@ void TreeNode<T>::show(void)
 {
 	struct NodeDepth
 	{
-		shared_ptr<TreeNode<T> > node;
+		Tree<T> node;
 		int layer;
 
 		// The coordinate of node in output
@@ -91,7 +97,7 @@ void TreeNode<T>::show(void)
 	vector<string> outs;
 
 	// Get the sequence of nodes
-	nodes.push({ shared_ptr<TreeNode<T>>(this), Height, (1 << Height) - 1 });
+	nodes.push({ Tree<T>(this), Height, (1 << Height) - 1 });
 
 	string s1 = "";
 	string s2 = "";
@@ -281,15 +287,15 @@ int ComputePostfix(string postfix
 	return numbers.top();
 }
 
-shared_ptr<TreeNode<char> > PostfixToTree(string postfix)
+Tree<char> PostfixToTree(string postfix)
 {
-	stack<shared_ptr<TreeNode<char> > > nodes;
+	stack<Tree<char> > nodes;
 	for (char& c : postfix)
 	{
 		if ((c >= 'a' && c <= 'z')
 			|| (c >= 'A' && c <= 'Z'))
 		{
-			nodes.push(shared_ptr<TreeNode<char> >(
+			nodes.push(Tree<char>(
 				new TreeNode<char>(c)));
 		}
 		else if (c == '+' || c == '-' || c == '*' || c == '/')
@@ -298,12 +304,12 @@ shared_ptr<TreeNode<char> > PostfixToTree(string postfix)
 			{
 				throw "Postfix is illegal and cannot convert to tree.";
 			}
-			shared_ptr<TreeNode<char> > right = nodes.top();
+			Tree<char> right = nodes.top();
 			nodes.pop();
-			shared_ptr<TreeNode<char> > left = nodes.top();
+			Tree<char> left = nodes.top();
 			nodes.pop();
 
-			nodes.push(shared_ptr<TreeNode<char> >(
+			nodes.push(Tree<char>(
 				new TreeNode<char>(c, left, right)));
 		}
 		else
