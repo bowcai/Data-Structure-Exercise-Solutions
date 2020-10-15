@@ -1,54 +1,44 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <algorithm>
-#include <map>
+#include <queue>
+#include <unordered_map>
 using namespace std;
 
 typedef char ElementType;
 typedef int WeightType;
 
-struct Elem
-{
-	ElementType data;
-	WeightType weight;
-};
-
 struct HuffmanNode
 {
-	int id;
-	
-	WeightType weight;
+	ElementType data;
+
+	// The total number of bits to encode
+	// all the child leaves' characters in the string
+	// if this node is the root node.
+	WeightType totalBits;
 
 	// Sum of all the child leaves' weight
-	WeightType leafweight;
+	WeightType leafWeight;
 	HuffmanNode* lchild;
 	HuffmanNode* rchild;
 };
 
-typedef HuffmanNode *HuffmanTree;
+typedef HuffmanNode* HuffmanTree;
 
-int Isleaf(const HuffmanTree T)
+bool Isleaf(const HuffmanTree T)
 {
-	if (T->lchild == NULL && T->rchild == NULL)
-	{
-		return 1;
-	}
-	else
-	{
-		return 0;
-	}
+	return T->lchild && T->rchild;
 }
 
-HuffmanTree CreateLeaf(int id, WeightType weight)
+HuffmanTree CreateLeaf(ElementType data, WeightType weight)
 {
 	HuffmanTree leaf = new HuffmanNode;
-	leaf->lchild = NULL;
-	leaf->rchild = NULL;
-	leaf->id = id;
-	leaf->leafweight = 0;
-	leaf->weight = weight;
-	
+	leaf->lchild = nullptr;
+	leaf->rchild = nullptr;
+	leaf->data = data;
+	leaf->leafWeight = weight;
+	leaf->totalBits = 0;
+
 	return leaf;
 }
 
@@ -57,78 +47,64 @@ HuffmanTree CombineHuffman(const HuffmanTree a, const HuffmanTree b)
 	HuffmanTree T = new HuffmanNode;
 	T->lchild = a;
 	T->rchild = b;
-	T->id = -1;
-	
-	T->weight = a->weight + b->weight
-			+ a->leafweight + b->leafweight;
-	T->leafweight = a->leafweight + b->leafweight;
-	
-	// If a or b is a leaf, then we should add its weight
-	// to T's leafweight.
-	// But leaf's weight is stored in its "weight" but not
-	// its "leafweight"
-	if (Isleaf(a))
-	{
-		T->leafweight += a->weight;
-	}
-	if (Isleaf(b))
-	{
-		T->leafweight += b->weight;
-	}
+
+	// Each child leaves' character gets one more bit to encode.
+	T->totalBits = a->totalBits + b->totalBits
+		+ a->leafWeight + b->leafWeight;
+
+	T->leafWeight = a->leafWeight + b->leafWeight;
 
 	return T;
 }
 
 void DelHuffman(HuffmanTree T)
 {
-	if (T == NULL)
+	if (T == nullptr)
 	{
 		return;
 	}
 	DelHuffman(T->lchild);
 	DelHuffman(T->rchild);
-	
+
 	delete T;
-	T = NULL;
+	T = nullptr;
 }
 
-bool CompareWeight(const HuffmanTree a, const HuffmanTree b)
+HuffmanTree BuildHuffman(const unordered_map<ElementType, WeightType>& count)
 {
-	return a->weight < b->weight;
-}
-
-HuffmanTree BuildHuffman(const vector<Elem>& v)
-{
-	vector<HuffmanTree> Trees;
-	for (int i = 0; i < (int)v.size(); i++)
+	auto greaterWeight = [](const HuffmanTree a, const HuffmanTree b)
 	{
-		HuffmanTree leaf = CreateLeaf(i, v[i].weight);
-		Trees.push_back(leaf);
-	}
+		return a->leafWeight > b->leafWeight;
+	};
 	
+	priority_queue<HuffmanTree, vector<HuffmanTree>
+				, decltype(greaterWeight)> Trees(greaterWeight);
+
+	for (auto& c : count)
+	{
+		HuffmanTree leaf = CreateLeaf(c.first, c.second);
+		Trees.push(leaf);
+	}
+
 	while (Trees.size() >= 2)
 	{
-		vector<HuffmanTree>::iterator iter_a
-			= min_element(Trees.begin(), Trees.end(), CompareWeight);
-		HuffmanTree a = *iter_a;
-		Trees.erase(iter_a);
+		HuffmanTree a = Trees.top();
+		Trees.pop();
 
-		vector<HuffmanTree>::iterator iter_b
-			= min_element(Trees.begin(), Trees.end(), CompareWeight);
-		HuffmanTree b = *iter_b;
-		Trees.erase(iter_b);
+		HuffmanTree b = Trees.top();
+		Trees.pop();
 
-		HuffmanTree temp = CombineHuffman(a, b);
-		Trees.push_back(temp);
+		Trees.push(CombineHuffman(a, b));
 	}
 
-	return Trees[0];
+	HuffmanTree root = Trees.top();
+	return root;
 }
 
-void ToFrequency(string S, vector<Elem>& v)
+unordered_map<char, int> ToFrequency(string S)
 {
-	map<char, int> count;
-	
+	unordered_map<char, int> count;
+
 	for (char& c : S)
 	{
 		if (count.find(c) == count.end())
@@ -141,23 +117,19 @@ void ToFrequency(string S, vector<Elem>& v)
 		}
 	}
 
-	for (auto& i : count)
-	{
-		v.push_back({ i.first, i.second });
-	}
+	return count;
 }
 
 int main(void)
 {
 	string S;
-	cin >> S;
+	getline(cin, S);
 
-	vector<Elem> v;
-	ToFrequency(S, v);
+	unordered_map<char, int> count = ToFrequency(S);
 
-	HuffmanTree T = BuildHuffman(v);
+	HuffmanTree T = BuildHuffman(count);
 
-	cout << T->weight << endl;
+	cout << T->totalBits << endl;
 	DelHuffman(T);
 
 	return 0;

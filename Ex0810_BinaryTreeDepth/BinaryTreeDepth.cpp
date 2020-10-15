@@ -38,7 +38,7 @@ void DelTree(Tree T)
 
 int TreeDepth(const vector<pair<int, int> > &v)
 {
-	vector<Tree> nodes;
+	vector<Tree> nodes(v.size());
 	int maxdepth = 0;
 	for (int i = 0; i < (int)v.size(); i++)
 	{
@@ -47,7 +47,7 @@ int TreeDepth(const vector<pair<int, int> > &v)
 	
 	for (int i = 0; i < (int)v.size(); i++)
 	{
-		if (v[i].first > 0)
+		if (v[i].first > 0 && v[i].first <= nodes.size())
 		{
 			nodes[i]->lchild = nodes[v[i].first-1];
 			nodes[v[i].first-1]->depth = nodes[i]->depth + 1;
@@ -58,7 +58,7 @@ int TreeDepth(const vector<pair<int, int> > &v)
 			}
 		}
 
-		if (v[i].second > 0)
+		if (v[i].second > 0 && v[i].second <= nodes.size())
 		{
 			nodes[i]->rchild = nodes[v[i].second-1];
 			nodes[v[i].second-1]->depth = nodes[i]->depth + 1;
@@ -85,7 +85,7 @@ int main(void)
 	int n;
 	cin >> n;
 
-	vector<pair<int, int> > v;
+	vector<pair<int, int> > v(n);
 	for (int i = 0; i < n; i++)
 	{
 		pair<int, int> temp;
