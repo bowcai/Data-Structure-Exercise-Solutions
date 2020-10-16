@@ -9,10 +9,10 @@ using namespace std;
 class Maze
 {
 public:
-	int x_len, y_len;
+	const int x_len, y_len;
 
 	// Probability of an open path
-	double open_prob;
+	const double open_prob;
 	
 	// The map of maze
 	vector<vector<int> > maze_map;
@@ -27,18 +27,18 @@ public:
 	stack<int> step_direct;
 
 	// The allowed directions
-	vector<vector<int> > directions 
+	const vector<vector<int> > directions 
 		= { {1,0}, {0,1}, {-1,0}, {0,-1} };
 
 	Maze(int, int, double);
 	~Maze();
-	int randomBlock(void);
+	int randomBlock(void) const;
 	void initialBlocks(void);
-	void showMaze(void);
-	int canStep(int, int);
-	int getRoutine(void);
-	void showRoutine(void);
-	void showMapRoutine(void);
+	void showMaze(void) const;
+	bool canStep(int, int) const;
+	bool getRoutine(void);
+	void showRoutine(void) const;
+	void showMapRoutine(void) const;
 	
 private:
 
@@ -58,7 +58,7 @@ Maze::~Maze()
 {
 }
 
-int Maze::randomBlock(void)
+int Maze::randomBlock(void) const
 {
 	return (double)rand() / RAND_MAX > open_prob ? 1 : 0;
 }
@@ -74,7 +74,7 @@ void Maze::initialBlocks(void)
 	}
 }
 
-void Maze::showMaze(void)
+void Maze::showMaze(void) const
 {
 	cout << "Showing the maze:" << endl;
 	for (int i = 0; i < x_len; i++)
@@ -96,25 +96,18 @@ void Maze::showMaze(void)
 }
 
 // Check the accessibility of next step
-int Maze::canStep(int x, int y)
+bool Maze::canStep(int x, int y) const
 {
 	if (x < 0 || x >= x_len 
 		|| y < 0 || y >= y_len)
 	{
-		return 0;
+		return false;
 	}
-	if (maze_map[x][y] == 1)
-	{
-		return 0;
-	}
-	if (pass[x][y] == 1)
-	{
-		return 0;
-	}
-	return 1;
+
+	return maze_map[x][y] == 0 && pass[x][y] == 0;
 }
 
-int Maze::getRoutine(void)
+bool Maze::getRoutine(void)
 {
 	int x = 0, y = 0;
 	unsigned int i = 0;
@@ -155,7 +148,7 @@ int Maze::getRoutine(void)
 			// Check if reach the exit
 			if (x == x_len - 1 && y == y_len-1)
 			{
-				return 1;
+				return true;
 			}
 
 			// Reset the direction and continue
@@ -171,7 +164,7 @@ int Maze::getRoutine(void)
 			// If routine is empty, then there is no solution
 			if (routine.empty())
 			{
-				return 0;
+				return false;
 			}
 
 			// Retrieve last point
@@ -185,11 +178,11 @@ int Maze::getRoutine(void)
 		}
 		
 	}
-	return 0;
+	return false;
 }
 
 // Show the result of routine
-void Maze::showRoutine(void)
+void Maze::showRoutine(void) const
 {
 	stack<vector<int> > routine_copy = routine;
 	stack<vector<int> > temp;
@@ -212,7 +205,7 @@ void Maze::showRoutine(void)
 }
 
 // Show routine in map
-void Maze::showMapRoutine(void)
+void Maze::showMapRoutine(void) const
 {
 	vector<vector<int> > maze_map_copy = maze_map;
 	stack<vector<int> > routine_copy = routine;
@@ -250,13 +243,12 @@ void Maze::showMapRoutine(void)
 int main(void)
 {
 	srand((unsigned)time(nullptr));
-	int m = 8, n = 7;
-	double prob = 0.70;
+	constexpr int m = 8, n = 7;
+	constexpr double prob = 0.70;
 	Maze maze1(m, n, prob);
 	maze1.showMaze();
-	int IsSolution = maze1.getRoutine();
 
-	if (IsSolution)
+	if (maze1.getRoutine())
 	{
 		cout << "There is a solution :)" << endl;
 		maze1.showRoutine();

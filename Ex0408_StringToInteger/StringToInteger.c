@@ -21,7 +21,7 @@ int my_atoi(const char s[], size_t length)
 
 int main(void)
 {
-	char s[] = "-1231904";
+	const char s[] = "-1231904";
 	printf("Origin string: %s\n", s);
 	int num = my_atoi(s, sizeof(s)/sizeof(s[0]));
 	printf("Translated integer: %d\n", num);

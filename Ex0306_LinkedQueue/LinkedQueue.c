@@ -109,8 +109,8 @@ void DisposeQueue(LQueue Q)
 
 int main(void)
 {
-	int input[] = { 3,2,5,4,1,3,6 };
-	int n = sizeof(input) / sizeof(input[0]);
+	const int input[] = { 3,2,5,4,1,3,6 };
+	const int n = sizeof(input) / sizeof(input[0]);
 
 	LQueue Q = CreateQueue();
 

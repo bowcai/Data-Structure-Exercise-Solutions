@@ -3,7 +3,7 @@
 #include <vector>
 using namespace std;
 
-int IsLegal(string S, int M)
+bool IsLegal(string S, int M)
 {
 	int current_size = 0;
 	for (int i = 0; i < (int)S.length(); i++)
@@ -17,21 +17,21 @@ int IsLegal(string S, int M)
 			current_size--;
 			break;
 		default:
-			return 0;
+			return false;
 			break;
 		}
 		if (current_size<0 || current_size>M)
 		{
-			return 0;
+			return false;
 		}
 	}
 	if (current_size == 0)
 	{
-		return 1;
+		return true;
 	}
 	else
 	{
-		return 0;
+		return false;
 	}
 }
 

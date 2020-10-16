@@ -52,7 +52,7 @@ void MagicSquare(int m)
 
 int main(void)
 {
-	int m = 15;
+	constexpr int m = 15;
 	MagicSquare(m);
 
 	return 0;

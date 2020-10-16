@@ -34,10 +34,8 @@ public:
 	void BFSprint(int);
 };
 
-AdjList::AdjList()
+AdjList::AdjList() : vexnum(0), arcnum(0)
 {
-	vexnum = 0;
-	arcnum = 0;
 }
 
 AdjList::~AdjList()
@@ -81,7 +79,7 @@ void AdjList::AddArc(int i, int j)
 {
 	if (i >= vexnum || j >= vexnum)
 	{
-		cerr << "Vertex number out of range!" << endl;
+		cerr << "Vertex index out of range!" << endl;
 		cerr << "Cannot add the arc." << endl;
 		return;
 	}
@@ -115,7 +113,7 @@ void AdjList::BFSprint(int k)
 {
 	if (k >= vexnum)
 	{
-		cerr << "Vertex number out of range!" << endl;
+		cerr << "Vertex index out of range!" << endl;
 		cerr << "Cannot find the vertex." << endl;
 		return;
 	}

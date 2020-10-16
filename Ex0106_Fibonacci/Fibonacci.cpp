@@ -77,8 +77,8 @@ int fibonacci3(int n)
 
 int main(void)
 {
-	const int test_times = 100000;
-	const int n_fibonacci = 25;
+	constexpr int test_times = 100000;
+	constexpr int n_fibonacci = 25;
 	
 	time_t time1_start = clock();
 	// Test for multiple times

@@ -92,8 +92,8 @@ int IsShift(const char s[], const char t[])
 
 int main(void)
 {
-    char s[MAXSIZE] = "asdf";
-    char t[MAXSIZE] = "sdfa";
+    const char s[MAXSIZE] = "asdf";
+    const char t[MAXSIZE] = "sdfa";
     int rslt;
 
     rslt = IsShift(s, t);

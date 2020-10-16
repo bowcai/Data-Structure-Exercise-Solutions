@@ -3,52 +3,49 @@
 #include <stack>
 #include <climits>
 
-#define INF INT_MAX
-
 using namespace std;
-
-typedef int WeightType;
 
 template <typename T>
 class Graph
 {
 public:
+	typedef int WeightType;
+
+private:
 	int vexnum;
 	int arcnum;
 	vector<T> vertexes;
 	vector<vector<WeightType> > arcs;
 
+public:
+	constexpr static WeightType INF = INT_MAX;
 	Graph(int);
 	~Graph();
 	void AddArc(int, int, WeightType);
 	void DelArc(int, int);
 	void PrintAdjMat(void) const;
 	int BreakCycle(void);
-	int BreakDFS(int, int, vector<int>&, stack<int>&);
+	int BreakDFS(int, int, vector<bool>&, stack<int>&);
 	void BuildMinSpan(void);
-
-private:
-
 };
+
+template <typename T>
+constexpr typename Graph<T>::WeightType Graph<T>::INF;
 
 // Use adjacent matrix to store the graph
 template <typename T>
 Graph<T>::Graph(int m) :vexnum(m), arcnum(0)
+			, vertexes(vector<T>(vexnum))
+			, arcs(vector<vector<WeightType> >(vexnum
+						, vector<WeightType>(vexnum, INF)))
 {
-	vertexes.resize(vexnum);
 	for (int i = 0; i < (int)vertexes.size(); i++)
 	{
 		vertexes[i] = i;
 	}
 
-	arcs.resize(vexnum);
 	for (int i = 0; i < (int)arcs.size(); i++)
 	{
-		arcs[i].resize(m);
-		for (int j = 0; j < (int)arcs[i].size(); j++)
-		{
-			arcs[i][j] = INF;
-		}
 		arcs[i][i] = 0;
 	}
 }
@@ -63,15 +60,12 @@ void Graph<T>::AddArc(int m, int n, WeightType w)
 {
 	if (m >= vexnum || n >= vexnum)
 	{
-		cerr << "Vertex index out of range!" << endl;
-		return;
+		throw "Vertex index out of range!";
 	}
 
 	if (m == n)
 	{
-		cerr << "The arc cannot connect between the same vertex." 
-			<< endl;
-		return;
+		throw "The arc cannot connect between the same vertex.";
 	}
 
 	if (arcs[m][n] == INF)
@@ -87,15 +81,12 @@ void Graph<T>::DelArc(int m, int n)
 {
 	if (m >= vexnum || n >= vexnum)
 	{
-		cerr << "Vertex index out of range!" << endl;
-		return;
+		throw "Vertex index out of range!";
 	}
 
 	if (m == n)
 	{
-		cerr << "Cannot delete the arc between the same vertex." 
-			<< endl;
-		return;
+		throw "Cannot delete the arc between the same vertex.";
 	}
 
 	if (arcs[m][n] != INF)
@@ -130,13 +121,13 @@ void Graph<T>::PrintAdjMat(void) const
 
 // DFS for breaking the cycle
 template <typename T>
-int Graph<T>::BreakDFS(int k, int former, vector<int>& visited
+int Graph<T>::BreakDFS(int k, int former, vector<bool>& visited
 	, stack<int>& path)
 {
 	// Set the current point as visited and record it into path
-	visited[k] = 1;
+	visited[k] = true;
 	path.push(k);
-	
+
 	for (int i = 0; i < vexnum; i++)
 	{
 		// The arc between current vertex and former vertex 
@@ -163,7 +154,7 @@ int Graph<T>::BreakDFS(int k, int former, vector<int>& visited
 			else
 			{
 				int rslt = BreakDFS(i, k, visited, path);
-				
+
 				// If the deeper DFS finds a cycle,
 				// then continue to return the result
 				if (rslt != -1)
@@ -187,27 +178,20 @@ int Graph<T>::BreakCycle(void)
 	{
 		return 0;
 	}
-	
-	// Record the visited vertexes and the path of cycle
-	vector<int> visited;
-	stack<int> path;
 
-	// Initial the visited array
-	visited.resize(vexnum);
-	for (auto& i : visited)
-	{
-		i = 0;
-	}
+	// Record the visited vertexes and the path of cycle
+	vector<bool> visited(vexnum, false);
+	stack<int> path;
 
 	// Try all the start vertex
 	for (int i = 0; i < vexnum; i++)
 	{
 		// Skip the visited vertex which cannot find a cycle
-		if (visited[i] == 0)
+		if (!visited[i])
 		{
 			// Start the DFS (-1 means no former vertex)
 			int rslt = BreakDFS(i, -1, visited, path);
-			
+
 			// If a cycle is found, then process the cycle
 			if (rslt != -1)
 			{
@@ -216,14 +200,14 @@ int Graph<T>::BreakCycle(void)
 				path.pop();
 				int current, m = -1, n = -1;
 				WeightType maxweight = 0;
-				while (path.size() > 0)
+				while (!path.empty())
 				{
 					current = path.top();
 					path.pop();
 					if (arcs[current][former] > maxweight)
 					{
 						maxweight = arcs[current][former];
-						
+
 						// Record the vertexes of maximum weight arc
 						m = current;
 						n = former;
@@ -240,7 +224,7 @@ int Graph<T>::BreakCycle(void)
 
 				// Delete the arc with maximum weight
 				DelArc(m, n);
-				
+
 				// Find a cycle
 				return 1;
 			}

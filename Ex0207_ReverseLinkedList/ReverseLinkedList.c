@@ -111,7 +111,7 @@ void Reverse(List L)
 int main(void)
 {
 	List L = MakeEmpty();
-	datatype input_array[] = { 1,9,3,5,4,2,7,4,5 };
+	const datatype input_array[] = { 1,9,3,5,4,2,7,4,5 };
 	BuildList(L, input_array, sizeof(input_array) / sizeof(input_array[0]));
 	printf("List before reversion:\n");
 	ShowList(L);
