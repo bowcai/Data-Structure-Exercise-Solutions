@@ -39,11 +39,6 @@ Graph<T>::Graph(int m) :vexnum(m), arcnum(0)
 			, arcs(vector<vector<WeightType> >(vexnum
 						, vector<WeightType>(vexnum, INF)))
 {
-	for (int i = 0; i < (int)vertexes.size(); i++)
-	{
-		vertexes[i] = i;
-	}
-
 	for (int i = 0; i < (int)arcs.size(); i++)
 	{
 		arcs[i][i] = 0;
