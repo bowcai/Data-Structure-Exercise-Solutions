@@ -1,8 +1,8 @@
-## Exercise 09.10 - Broken Circle Method
+## Exercise 09.10 - Breaking Circle Method
 
-Use broken circle method to compute the minimum spanning tree
+Use breaking circle method to compute the minimum spanning tree
 of a weighted connected undirected graph.  
-The method of broken circle is to pick a circle randomly and 
+The method of breaking circle is to pick a circle randomly and 
 delete the arc with the largest weight.
 Repeat the operation until no circle left in the graph.
 

@@ -17,6 +17,9 @@ private:
 	vector<T> vertexes;
 	vector<vector<WeightType> > arcs;
 
+	bool BreakCycle(void);
+	int BreakDFS(int, int, vector<bool>&, stack<int>&);
+
 public:
 	constexpr static WeightType INF = INT_MAX;
 	Graph(int);
@@ -24,8 +27,6 @@ public:
 	void AddArc(int, int, WeightType);
 	void DelArc(int, int);
 	void PrintAdjMat(void) const;
-	int BreakCycle(void);
-	int BreakDFS(int, int, vector<bool>&, stack<int>&);
 	void BuildMinSpan(void);
 };
 
@@ -138,7 +139,7 @@ int Graph<T>::BreakDFS(int k, int former, vector<bool>& visited
 			// If one of the connected vertex has been visited, 
 			// then there is a cycle
 			// return the start vertex of the cycle
-			if (visited[i] == 1)
+			if (visited[i])
 			{
 				path.push(i);
 				return i;
@@ -166,12 +167,12 @@ int Graph<T>::BreakDFS(int k, int former, vector<bool>& visited
 }
 
 template <typename T>
-int Graph<T>::BreakCycle(void)
+bool Graph<T>::BreakCycle(void)
 {
 	// There will not be cycles if vexnum<=2
 	if (vexnum <= 2)
 	{
-		return 0;
+		return false;
 	}
 
 	// Record the visited vertexes and the path of cycle
@@ -221,13 +222,13 @@ int Graph<T>::BreakCycle(void)
 				DelArc(m, n);
 
 				// Find a cycle
-				return 1;
+				return true;
 			}
 		}
 	}
 
 	// No cycle found
-	return 0;
+	return false;
 }
 
 template <typename T>
