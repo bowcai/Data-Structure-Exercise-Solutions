@@ -20,7 +20,7 @@ int main(void)
 
 	QSort(R, 1, 14);
 	
-	cout<<"After sorting:"<<endl;
+	cout << "After sorting:" << endl;
 	for (int i = 1; i <= 14; i++)
 	{
 		cout << R[i] << " ";

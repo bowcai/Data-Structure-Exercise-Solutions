@@ -30,21 +30,17 @@ private:
 };
 
 Graph::Graph(int m) :vexnum(m), arcnum(0)
+			, vertexes(vector<ElementType>(vexnum))
+			, arcs(vector<vector<ElementType> >(vexnum
+						, vector<ElementType>(vexnum, INF)))
 {
-	vertexes.resize(vexnum);
 	for (int i = 0; i < (int)vertexes.size(); i++)
 	{
 		vertexes[i] = i;
 	}
 
-	arcs.resize(vexnum);
 	for (int i = 0; i < (int)arcs.size(); i++)
 	{
-		arcs[i].resize(m);
-		for (int j = 0; j < (int)arcs[i].size(); j++)
-		{
-			arcs[i][j] = INF;
-		}
 		arcs[i][i] = 0;
 	}
 }
@@ -57,15 +53,12 @@ void Graph::AddArc(int m, int n, WeightType w)
 {
 	if (m >= vexnum || n >= vexnum)
 	{
-		cerr << "Vertex index out of range!" << endl;
-		return;
+		throw "Vertex index out of range!";
 	}
 
 	if (m == n)
 	{
-		cerr << "The arc cannot connect between the same vertex."
-			<< endl;
-		return;
+		throw "The arc cannot connect between the same vertex.";
 	}
 
 	if (arcs[m][n] == INF)
@@ -80,15 +73,12 @@ void Graph::DelArc(int m, int n)
 {
 	if (m >= vexnum || n >= vexnum)
 	{
-		cerr << "Vertex index out of range!" << endl;
-		return;
+		throw "Vertex index out of range!";
 	}
 
 	if (m == n)
 	{
-		cerr << "Cannot delete the arc between the same vertex."
-			<< endl;
-		return;
+		throw "Cannot delete the arc between the same vertex.";
 	}
 
 	if (arcs[m][n] != INF)
@@ -166,8 +156,7 @@ Graph Graph::Kruskal(void) const
 	{
 		if (AllEdges.empty())
 		{
-			cerr << "Number of edges not enough." << endl;
-			exit(1);
+			throw "Number of edges not enough.";
 		}
 
 		arc E = AllEdges.back();

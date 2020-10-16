@@ -36,10 +36,8 @@ public:
 	vector<int> Topsort(void) const;
 };
 
-AdjList::AdjList()
+AdjList::AdjList() : vexnum(0), arcnum(0)
 {
-	vexnum = 0;
-	arcnum = 0;
 }
 
 AdjList::~AdjList()
@@ -56,7 +54,7 @@ void AdjList::MakeEmpty(void)
 
 		temp = i.firstarc;
 
-		while (temp != NULL)
+		while (temp != nullptr)
 		{
 			tempnext = temp->next;
 			delete temp;
@@ -76,7 +74,7 @@ void AdjList::AddVertex(ElementType x)
 {
 	struct Vertex NewVertex;
 	NewVertex.data = x;
-	NewVertex.firstarc = NULL;
+	NewVertex.firstarc = nullptr;
 
 	vertexes.push_back(NewVertex);
 	vexnum += 1;
@@ -95,7 +93,7 @@ void AdjList::AddArc(int i, int j)
 	}
 
 	PtrToArc temp = vertexes[i].firstarc;
-	while (temp != NULL)
+	while (temp != nullptr)
 	{
 		if (temp->adjvex == j)
 		{
@@ -145,7 +143,7 @@ vector<int> AdjList::Topsort(void) const
 		TopVex.push_back(v);
 
 		PtrToArc w = vertexes[v].firstarc;
-		while (w != NULL)
+		while (w != nullptr)
 		{
 			Indegree_copy[w->adjvex]--;
 			if (Indegree_copy[w->adjvex] == 0)

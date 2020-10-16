@@ -3,8 +3,6 @@
 #include <vector>
 #include <cfloat>
 
-#define INF DBL_MAX
-
 using namespace std;
 
 typedef struct coordinate
@@ -17,11 +15,14 @@ typedef double WeightType;
 
 class Graph
 {
-public:
-	int vexnum;
+private:
+	const int vexnum;
 	int arcnum;
 	vector<ElementType> vertexes;
 	vector<vector<WeightType> > arcs;
+
+public:
+	constexpr static double INF = DBL_MAX;
 
 	Graph(int);
 	~Graph();
@@ -32,23 +33,17 @@ public:
 	void PrintAdjMat(void) const;
 	double Euclidean(int, int) const;
 	WeightType ShortestRoad(int) const;
-
-private:
-
 };
 
-Graph::Graph(int m) :vexnum(m), arcnum(0)
-{
-	vertexes.resize(vexnum);
+constexpr double Graph::INF;
 
-	arcs.resize(vexnum);
+Graph::Graph(int m) :vexnum(m), arcnum(0)
+			, vertexes(vector<ElementType>(vexnum))
+			, arcs(vector<vector<WeightType> >(vexnum
+						, vector<WeightType>(vexnum, INF)))
+{
 	for (int i = 0; i < (int)arcs.size(); i++)
 	{
-		arcs[i].resize(m);
-		for (int j = 0; j < (int)arcs[i].size(); j++)
-		{
-			arcs[i][j] = INF;
-		}
 		arcs[i][i] = 0;
 	}
 }
@@ -62,6 +57,11 @@ void Graph::AddVertex(int m, ElementType x)
 	// If input index begin from 1
 	m--;
 	
+	if (m >= vexnum)
+	{
+		throw "Vertex index out of range!";
+	}
+
 	vertexes[m] = x;
 }
 
@@ -73,15 +73,12 @@ void Graph::AddArc(int m, int n)
 	
 	if (m >= vexnum || n >= vexnum)
 	{
-		cerr << "Vertex index out of range!" << endl;
-		return;
+		throw "Vertex index out of range!";
 	}
 
 	if (m == n)
 	{
-		cerr << "The arc cannot connect between the same vertex."
-			<< endl;
-		return;
+		throw "The arc cannot connect between the same vertex.";
 	}
 
 	if (arcs[m][n] == INF)
@@ -103,15 +100,12 @@ void Graph::DelArc(int m, int n)
 	
 	if (m >= vexnum || n >= vexnum)
 	{
-		cerr << "Vertex index out of range!" << endl;
-		return;
+		throw "Vertex index out of range!";
 	}
 
 	if (m == n)
 	{
-		cerr << "Cannot delete the arc between the same vertex."
-			<< endl;
-		return;
+		throw "Cannot delete the arc between the same vertex.";
 	}
 
 	if (arcs[m][n] != INF)
@@ -119,7 +113,9 @@ void Graph::DelArc(int m, int n)
 		arcnum--;
 	}
 	arcs[m][n] = INF;
-	arcs[n][m] = INF;
+
+	// For undirected graph
+	// arcs[n][m] = INF;
 }
 
 // Print out the adjacent matrix
@@ -160,33 +156,27 @@ WeightType Graph::ShortestRoad(int m_start) const
 
 	if (m_start >= vexnum)
 	{
-		cerr << "Vertex index out of range!" << endl;
-		return -1;
+		throw "Vertex index out of range!";
 	}
 
 	WeightType RoadLength = 0;
 
-	vector<int> known;
-	known.resize(vexnum);
-	for (auto& k : known)
-	{
-		k = 0;
-	}
-	known[m_start] = 1;
+	vector<bool> known(vexnum, false);
+
+	known[m_start] = true;
 
 	// Minimun distance to start point
-	vector<WeightType> MinDist;
+	vector<WeightType> MinDist(vexnum);
 	// Length of last step to this point
 	// (Length of new road needed to be built)
-	vector<WeightType> LastDist;
-	MinDist.resize(vexnum);
-	LastDist.resize(vexnum);
+	vector<WeightType> LastDist(vexnum);
+
 	for (int i = 0; i < vexnum; i++)
 	{
 		LastDist[i] = MinDist[i] = arcs[m_start][i];
 	}
 
-	while (1)
+	while (true)
 	{
 		int v_shortest = -1;
 		WeightType w_shortest = INF;
@@ -194,7 +184,7 @@ WeightType Graph::ShortestRoad(int m_start) const
 		// Get the shortest unknown vertex
 		for (int i = 0; i < vexnum; i++)
 		{
-			if (known[i] == 1)
+			if (known[i])
 			{
 				continue;
 			}
@@ -209,10 +199,10 @@ WeightType Graph::ShortestRoad(int m_start) const
 		// No unknown accessible vertex
 		if (v_shortest == -1)
 		{
-			for (auto& k : known)
+			for (bool k : known)
 			{
 				// Found vertex unaccessible
-				if (k == 0)
+				if (!k)
 				{
 					return -1;
 				}
@@ -221,13 +211,13 @@ WeightType Graph::ShortestRoad(int m_start) const
 			return RoadLength;
 		}
 
-		known[v_shortest] = 1;
+		known[v_shortest] = true;
 		RoadLength += LastDist[v_shortest];
 
 		// Update MinDist and LastDist
 		for (int j = 0; j < vexnum; j++)
 		{
-			if (known[j] == 1)
+			if (known[j])
 			{
 				continue;
 			}
@@ -285,7 +275,7 @@ int main(void)
 	cout << endl;
 	cout << "Output:" << endl;
 
-	cout.setf(ios::fixed);
+	cout.setf(ios_base::fixed);
 	cout.precision(2);
 
 	for (auto& G : graphs)

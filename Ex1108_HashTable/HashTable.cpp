@@ -25,16 +25,16 @@ public:
 	int n_element;
 	vector<List> lists;
 	
-	HashTable(int);
+	HashTable(int n = 7);
 	~HashTable();
 	int HashFunc(KeyType) const;
-	int IsPrime(int) const;
-	int NextPrime(int) const;
+	static bool IsPrime(int);
+	static int NextPrime(int);
 	void MakeEmpty(void);
 	void AddToList(PtrToNode, int);
 	void DeleteFromList(PtrToNode, PtrToNode);
 	void InsertKey(KeyType);
-	void InsertKey(vector<KeyType>);
+	void InsertKey(const vector<KeyType>&);
 	PtrToNode FindKey(KeyType) const;
 	void DeleteKey(KeyType);
 	void PrintTable(void) const;
@@ -53,7 +53,7 @@ HashTable::HashTable(int n)
 	{
 		l.length = 0;
 		l.head.key = 0;
-		l.head.next = NULL;
+		l.head.next = nullptr;
 	}
 	n_element = 0;
 }
@@ -68,7 +68,7 @@ int HashTable::HashFunc(KeyType k) const
 	return k % length;
 }
 
-int HashTable::IsPrime(int n) const
+bool HashTable::IsPrime(int n)
 {
 	if (n < 2)
 	{
@@ -86,7 +86,7 @@ int HashTable::IsPrime(int n) const
 	return 1;
 }
 
-int HashTable::NextPrime(int n) const
+int HashTable::NextPrime(int n)
 {
 	if (n <= 2)
 	{
@@ -126,11 +126,11 @@ void HashTable::MakeEmpty(void)
 	for (auto& i : lists)
 	{
 		PtrToNode temp = i.head.next;
-		i.head.next = NULL;
+		i.head.next = nullptr;
 		i.length = 0;
 
-		PtrToNode temp_next = NULL;
-		while (temp != NULL)
+		PtrToNode temp_next = nullptr;
+		while (temp != nullptr)
 		{
 			temp_next = temp->next;
 			delete temp;
@@ -146,13 +146,13 @@ void HashTable::InsertKey(KeyType k)
 
 	PtrToNode NewNode = new Node;
 	NewNode->key = k;
-	NewNode->next = NULL;
+	NewNode->next = nullptr;
 	AddToList(NewNode, m);
 
 	n_element++;
 }
 
-void HashTable::InsertKey(vector<KeyType> ks)
+void HashTable::InsertKey(const vector<KeyType>& ks)
 {
 	for (auto& k : ks)
 	{
@@ -166,7 +166,7 @@ PtrToNode HashTable::FindKey(KeyType k) const
 
 	PtrToNode current = lists[m].head.next;
 
-	while (current != NULL)
+	while (current != nullptr)
 	{
 		if (current->key == k)
 		{
@@ -176,7 +176,7 @@ PtrToNode HashTable::FindKey(KeyType k) const
 	}
 	
 	cout << "Cannot find the key." << endl;
-	return NULL;
+	return nullptr;
 }
 
 void HashTable::DeleteKey(KeyType k)
@@ -186,12 +186,12 @@ void HashTable::DeleteKey(KeyType k)
 	PtrToNode former = &lists[m].head;
 	PtrToNode current = former->next;
 
-	while (current != NULL)
+	while (current != nullptr)
 	{
 		if (current->key == k)
 		{
 			DeleteFromList(former, current);
-			current = NULL;
+			current = nullptr;
 			n_element--;
 
 			return;
@@ -210,7 +210,7 @@ void HashTable::PrintTable(void) const
 		cout << i << ": ";
 		
 		PtrToNode current = lists[i].head.next;
-		while (current != NULL)
+		while (current != nullptr)
 		{
 			cout << current->key << " ";
 			current = current->next;

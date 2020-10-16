@@ -16,7 +16,7 @@ typedef PtrToNode List, Position;
 int IsEmpty(const List L);
 int IsLast(const Position P);
 List MakeList(void);
-void DeleteList(List& L);
+void DeleteList(List L);
 void ShowList(const List L);
 void Insert(datatype x, List L, Position P);
 List BuildList(const vector<datatype>& input_array);
@@ -30,7 +30,7 @@ void Merge(vector<Position>& Ptrs
 
 int main(void)
 {
-	vector<datatype> input = { 32,59,21,12,45,89
+	const vector<datatype> input = { 32,59,21,12,45,89
 		,63,34,26,7,6,18,24,45 };
 
 	List L = BuildList(input);
@@ -50,12 +50,12 @@ int main(void)
 
 int IsEmpty(const List L)
 {
-	return L->next == NULL;
+	return L->next == nullptr;
 }
 
 int IsLast(const Position P)
 {
-	return P->next == NULL;
+	return P->next == nullptr;
 }
 
 // Generate a new empty list
@@ -63,18 +63,18 @@ List MakeList(void)
 {
 	List L = new node;
 	L->data = 0;
-	L->next = NULL;
+	L->next = nullptr;
 
 	return L;
 }
 
 // Delete list
-void DeleteList(List& L)
+void DeleteList(List L)
 {
 	Position P, tmp;
 	P = L;
-	L = NULL;
-	while (P != NULL)
+	L = nullptr;
+	while (P != nullptr)
 	{
 		tmp = P->next;
 		delete P;
@@ -85,7 +85,7 @@ void DeleteList(List& L)
 void ShowList(const List L)
 {
 	Position P = L->next;
-	while (P != NULL)
+	while (P != nullptr)
 	{
 		printf("%d, ", P->data);
 		P = P->next;
@@ -122,7 +122,7 @@ int GetLength(const List L)
 	int l = 0;
 	Position P = L->next;
 
-	while (P != NULL)
+	while (P != nullptr)
 	{
 		l++;
 		P = P->next;
@@ -139,16 +139,16 @@ void MergeSort(List L)
 	// Auxiliary array to store the address of each element
 	// The index begin from 1
 	vector<Position> Ptrs;
-	Ptrs.push_back(NULL);
+	Ptrs.push_back(nullptr);
 
 	Position P = L->next;
-	L->next = NULL;
+	L->next = nullptr;
 	Position P_temp = P;
-	while (P != NULL)
+	while (P != nullptr)
 	{
 		Ptrs.push_back(P);
 		P_temp = P->next;
-		P->next = NULL;
+		P->next = nullptr;
 		P = P_temp;
 	}
 
@@ -179,7 +179,7 @@ void MergePass(vector<Position>& Ptrs
 void Merge(vector<Position>& Ptrs
 	, int begin1, int begin2)
 {
-	Position former = NULL;
+	Position former = nullptr;
 	Position P1, P2;
 	Position P;
 
@@ -197,7 +197,7 @@ void Merge(vector<Position>& Ptrs
 		P2 = P2->next;
 	}
 	
-	while (P1 != NULL && P2 != NULL)
+	while (P1 != nullptr && P2 != nullptr)
 	{
 		if (P1->data <= P2->data)
 		{
@@ -213,13 +213,13 @@ void Merge(vector<Position>& Ptrs
 		}
 	}
 
-	while (P1 != NULL)
+	while (P1 != nullptr)
 	{
 		former->next = P1;
 		former = P1;
 		P1 = P1->next;
 	}
-	while (P2 != NULL)
+	while (P2 != nullptr)
 	{
 		former->next = P2;
 		former = P2;
@@ -228,7 +228,7 @@ void Merge(vector<Position>& Ptrs
 
 	// Update vector Ptrs
 	int i = begin1;
-	while (P != NULL)
+	while (P != nullptr)
 	{
 		Ptrs[i] = P;
 		P = P->next;

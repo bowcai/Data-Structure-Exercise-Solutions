@@ -13,10 +13,10 @@ typedef struct AvlNode
 }*Position, *AvlTree;
 
 AvlTree MakeEmpty(AvlTree T);
-Position Find(ElementType x, AvlTree T);
-Position FindMin(AvlTree T);
-Position FindMax(AvlTree T);
-ElementType Retrieve(Position P);
+Position Find(ElementType x, const AvlTree T);
+Position FindMin(const AvlTree T);
+Position FindMax(const AvlTree T);
+ElementType Retrieve(const Position P);
 AvlTree Insert(ElementType x, AvlTree T);
 Position SingleRotateWithLeft(Position K2);
 Position SingleRotateWithRight(Position K2);
@@ -26,7 +26,7 @@ Position DoubleRotateWithRight(Position K3);
 
 int main(void)
 {
-	AvlTree T = NULL;
+	AvlTree T = nullptr;
 	T = Insert(1, T);
 	T = Insert(2, T);
 	T = Insert(3, T);
@@ -46,63 +46,65 @@ int main(void)
 
 AvlTree MakeEmpty(AvlTree T)
 {
-	if (T != NULL)
+	if (T != nullptr)
 	{
 		MakeEmpty(T->Left);
 		MakeEmpty(T->Right);
 
 		delete T;
 	}
-	return NULL;
+	return nullptr;
 }
 
-Position Find(ElementType x, AvlTree T)
+Position Find(ElementType x, const AvlTree T)
 {
-	while (T != NULL)
+	Position ptr = T;
+	while (ptr != nullptr)
 	{
-		if (x < T->Element)
+		if (x < ptr->Element)
 		{
-			T = T->Left;
+			ptr = ptr->Left;
 		}
-		else if (x > T->Element)
+		else if (x > ptr->Element)
 		{
-			T = T->Right;
+			ptr = ptr->Right;
 		}
-		else return T;
+		else return ptr;
 	}
-	return NULL;
+	return nullptr;
 }
 
-Position FindMin(AvlTree T)
+Position FindMin(const AvlTree T)
 {
-	if (T != NULL)
+	Position ptr = T;
+	if (ptr != nullptr)
 	{
-		while (T->Left != NULL)
+		while (ptr->Left != nullptr)
 		{
-			T = T->Left;
-		}
-	}
-	return T;
-}
-
-Position FindMax(AvlTree T)
-{
-	if (T != NULL)
-	{
-		while (T->Right != NULL)
-		{
-			T = T->Right;
+			ptr = ptr->Left;
 		}
 	}
-	return T;
+	return ptr;
 }
 
-ElementType Retrieve(Position P)
+Position FindMax(const AvlTree T)
 {
-	if (P == NULL)
+	Position ptr = T;
+	if (ptr != nullptr)
 	{
-		cerr << "Empty Position" << endl;
-		return 0;
+		while (ptr->Right != nullptr)
+		{
+			ptr = ptr->Right;
+		}
+	}
+	return ptr;
+}
+
+ElementType Retrieve(const Position P)
+{
+	if (P == nullptr)
+	{
+		throw "Empty Position";
 	}
 	else
 	{
@@ -110,9 +112,9 @@ ElementType Retrieve(Position P)
 	}
 }
 
-int Height(Position P)
+int Height(const Position P)
 {
-	if (P == NULL)
+	if (P == nullptr)
 	{
 		return -1;
 	}
@@ -121,12 +123,12 @@ int Height(Position P)
 
 AvlTree Insert(ElementType x, AvlTree T)
 {
-	if (T == NULL)
+	if (T == nullptr)
 	{
 		T = new AvlNode;
 		T->Element = x;
 		T->Height = 0;
-		T->Left = T->Right = NULL;
+		T->Left = T->Right = nullptr;
 	}
 	else if (x < T->Element)
 	{
