@@ -58,7 +58,7 @@ Graph<T>::~Graph()
 template <typename T>
 void Graph<T>::AddArc(int m, int n, WeightType w)
 {
-	if (m >= vexnum || n >= vexnum)
+	if (m >= vexnum || n >= vexnum || m < 0 || n < 0)
 	{
 		throw "Vertex index out of range!";
 	}

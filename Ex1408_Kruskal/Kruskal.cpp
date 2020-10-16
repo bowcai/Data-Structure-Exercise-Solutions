@@ -51,7 +51,7 @@ Graph::~Graph()
 
 void Graph::AddArc(int m, int n, WeightType w)
 {
-	if (m >= vexnum || n >= vexnum)
+	if (m >= vexnum || n >= vexnum || m < 0 || n < 0)
 	{
 		throw "Vertex index out of range!";
 	}
@@ -71,7 +71,7 @@ void Graph::AddArc(int m, int n, WeightType w)
 
 void Graph::DelArc(int m, int n)
 {
-	if (m >= vexnum || n >= vexnum)
+	if (m >= vexnum || n >= vexnum || m < 0 || n < 0)
 	{
 		throw "Vertex index out of range!";
 	}

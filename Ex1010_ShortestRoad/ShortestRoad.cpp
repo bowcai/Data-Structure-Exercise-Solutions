@@ -57,7 +57,7 @@ void Graph::AddVertex(int m, ElementType x)
 	// If input index begin from 1
 	m--;
 	
-	if (m >= vexnum)
+	if (m >= vexnum || m < 0)
 	{
 		throw "Vertex index out of range!";
 	}
@@ -71,7 +71,7 @@ void Graph::AddArc(int m, int n)
 	m--;
 	n--;
 	
-	if (m >= vexnum || n >= vexnum)
+	if (m >= vexnum || n >= vexnum  || m < 0 || n < 0)
 	{
 		throw "Vertex index out of range!";
 	}
@@ -98,7 +98,7 @@ void Graph::DelArc(int m, int n)
 	m--;
 	n--;
 	
-	if (m >= vexnum || n >= vexnum)
+	if (m >= vexnum || n >= vexnum || m < 0 || n < 0)
 	{
 		throw "Vertex index out of range!";
 	}
@@ -141,6 +141,16 @@ void Graph::PrintAdjMat(void) const
 
 double Graph::Euclidean(int m, int n) const
 {
+	if (m >= vexnum || n >= vexnum || m < 0 || n < 0)
+	{
+		throw "Vertex index out of range!";
+	}
+
+	if (m == n)
+	{
+		throw "Cannot delete the arc between the same vertex.";
+	}
+	
 	return sqrt((vertexes[m].x - vertexes[n].x) 
 		* (vertexes[m].x - vertexes[n].x)
 		+ (vertexes[m].y - vertexes[n].y)
@@ -154,7 +164,7 @@ WeightType Graph::ShortestRoad(int m_start) const
 	// If input index start from 1
 	m_start--;
 
-	if (m_start >= vexnum)
+	if (m_start >= vexnum || m_start < 0)
 	{
 		throw "Vertex index out of range!";
 	}

@@ -85,11 +85,9 @@ void AdjList::AddVertex(ElementType x)
 
 void AdjList::AddArc(int i, int j)
 {
-	if (i >= vexnum || j >= vexnum)
+	if (i >= vexnum || j >= vexnum  || i < 0 || j < 0)
 	{
-		cerr << "Vertex number out of range!" << endl;
-		cerr << "Cannot add the arc." << endl;
-		return;
+		throw "Vertex number out of range!";
 	}
 
 	PtrToArc temp = vertexes[i].firstarc;
@@ -159,7 +157,7 @@ vector<int> AdjList::Topsort(void) const
 
 	if (Counter != vexnum)
 	{
-		cerr << "Graph has a cycle." << endl;
+		throw "Graph has a cycle.";
 	}
 
 	return TopVex;
