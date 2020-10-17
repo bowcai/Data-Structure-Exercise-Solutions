@@ -44,8 +44,9 @@ class AdjList<E> {
             this.firstArc = firstArc;
         }
 
+        // Initialize the vertex with an head node
         public Vertex(E data) {
-            this(data, null);
+            this(data, new Arc(-1, null));
         }
     }
 
@@ -118,7 +119,7 @@ class AdjList<E> {
     public void addArc(int m, int n) {
         checkArcIndex(m, n);
 
-        Arc temp = vertexes.get(m).firstArc;
+        Arc temp = vertexes.get(m).firstArc.next;
 
         while (temp != null) {
             if (temp.adjVex == n) {
@@ -128,15 +129,43 @@ class AdjList<E> {
             temp = temp.next;
         }
 
-        vertexes.get(m).firstArc
-                = new Arc(n, vertexes.get(m).firstArc);
+        vertexes.get(m).firstArc.next
+                = new Arc(n, vertexes.get(m).firstArc.next);
 
         if (!isDirected()) {
-            vertexes.get(n).firstArc
-                    = new Arc(m, vertexes.get(n).firstArc);
+            vertexes.get(n).firstArc.next
+                    = new Arc(m, vertexes.get(n).firstArc.next);
         }
 
         arcNum++;
+    }
+
+    // Remove an arc from directed graph
+    private void removeArcDirected(int m, int n) {
+        checkArcIndex(m, n);
+
+        Arc temp = vertexes.get(m).firstArc;
+        while (temp.next != null) {
+            if (temp.next.adjVex == n) {
+                Arc former = temp.next;
+                temp.next = temp.next.next;
+                former.next = null;
+
+                // Add code here if you want
+                // to do something with former arc
+
+                return;
+            }
+        }
+
+        System.err.println("The arc has not been added");
+    }
+
+    public void removeArc(int m, int n) {
+        removeArcDirected(m, n);
+        if (!isDirected()) {
+            removeArcDirected(n, m);
+        }
     }
 
     // k is the begin vertex
@@ -154,7 +183,7 @@ class AdjList<E> {
 
             System.out.print(vertexes.get(current).data + " ");
 
-            Arc temp = vertexes.get(current).firstArc;
+            Arc temp = vertexes.get(current).firstArc.next;
             while (temp != null) {
                 if (!visited[temp.adjVex]) {
                     queue.offer(temp.adjVex);
