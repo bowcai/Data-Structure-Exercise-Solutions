@@ -49,58 +49,99 @@ class AdjList<E> {
         }
     }
 
-    protected ArrayList<Vertex<E>> vertices = new ArrayList<>();
+    protected ArrayList<Vertex<E>> vertexes = new ArrayList<>();
     private int vexNum = 0;
     private int arcNum = 0;
+    private final boolean directed;
 
+    // Default to construct an empty undirected graph
     public AdjList() {
+        this(false);
     }
 
     public AdjList(E[] array) {
-        this();
+        this(array, false);
+    }
+
+    public AdjList(boolean directed) {
+        this.directed = directed;
+    }
+
+    public AdjList(E[] array, boolean directed) {
+        addVertex(array);
+        this.directed = directed;
+    }
+
+    public boolean isDirected() {
+        return directed;
+    }
+
+    public int getArcNum() {
+        return arcNum;
+    }
+
+    public int getVexNum() {
+        return vexNum;
+    }
+
+    public void checkIndex(int index) {
+        if (index >= vexNum || index < 0) {
+            throw new IndexOutOfBoundsException(
+                    "Vertex index out of range.");
+        }
+    }
+
+    public void checkArcIndex(int m, int n) {
+        checkIndex(m);
+        checkIndex(n);
+
+        if (m == n) {
+            throw new IllegalArgumentException(
+                    "The arc cannot connect between the same vertex.");
+        }
+    }
+
+    public void addVertex(E x) {
+        vertexes.add(new Vertex<>(x));
+        vexNum++;
+    }
+
+    public void addVertex(E[] array) {
         if (array == null) {
-            throw new NullPointerException();
+            return;
         }
         for (E e: array) {
             addVertex(e);
         }
     }
 
-    public void addVertex(E x) {
-        vertices.add(new Vertex<>(x));
-        vexNum++;
-    }
+    public void addArc(int m, int n) {
+        checkArcIndex(m, n);
 
-    public void addArc(int i, int j) {
-        if (i >= vexNum || j >= vexNum) {
-            throw new IllegalArgumentException(
-                    "Vertex index out of range.");
-        }
-
-        Arc temp = vertices.get(i).firstArc;
+        Arc temp = vertexes.get(m).firstArc;
 
         while (temp != null) {
-            if (temp.adjVex == j) {
+            if (temp.adjVex == n) {
                 System.err.println("The arc has already been added.");
                 return;
             }
             temp = temp.next;
         }
 
-        vertices.get(i).firstArc
-                = new Arc(j, vertices.get(i).firstArc);
-        vertices.get(j).firstArc
-                = new Arc(i, vertices.get(j).firstArc);
+        vertexes.get(m).firstArc
+                = new Arc(n, vertexes.get(m).firstArc);
+
+        if (!isDirected()) {
+            vertexes.get(n).firstArc
+                    = new Arc(m, vertexes.get(n).firstArc);
+        }
 
         arcNum++;
     }
 
     // k is the begin vertex
     public void bfsPrint(int k) {
-        if (k >= vexNum) {
-            throw new IllegalArgumentException(
-                    "Vertex index out of range.");
-        }
+        checkIndex(k);
 
         boolean[] visited = new boolean[vexNum];
 
@@ -111,9 +152,9 @@ class AdjList<E> {
         while (!queue.isEmpty()) {
             int current = queue.remove();
 
-            System.out.print(vertices.get(current).data + " ");
+            System.out.print(vertexes.get(current).data + " ");
 
-            Arc temp = vertices.get(current).firstArc;
+            Arc temp = vertexes.get(current).firstArc;
             while (temp != null) {
                 if (!visited[temp.adjVex]) {
                     queue.offer(temp.adjVex);
