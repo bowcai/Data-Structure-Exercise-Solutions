@@ -33,7 +33,7 @@ public:
 	void MakeEmpty(void);
 	void AddArc(int, int);
 
-	vector<int> Topsort(void) const;
+	vector<int> Toposort(void) const;
 };
 
 AdjList::AdjList() : vexnum(0), arcnum(0)
@@ -118,12 +118,12 @@ void AdjList::AddArc(int i, int j)
 	arcnum += 1;
 }
 
-vector<int> AdjList::Topsort(void) const
+vector<int> AdjList::Toposort(void) const
 {
 	vector<int> Indegree_copy = Indegree;
 	queue<int> Q;
 	int Counter = 0;
-	vector<int> TopVex;
+	vector<int> TopoVex(vexnum);
 
 	for (int i = 0; i < vexnum; i++)
 	{
@@ -138,7 +138,7 @@ vector<int> AdjList::Topsort(void) const
 		int v = Q.front();
 		Q.pop();
 
-		TopVex.push_back(v);
+		TopoVex.push_back(v);
 
 		PtrToArc w = vertexes[v].firstarc;
 		while (w != nullptr)
@@ -160,7 +160,7 @@ vector<int> AdjList::Topsort(void) const
 		throw "Graph has a cycle.";
 	}
 
-	return TopVex;
+	return TopoVex;
 }
 
 int main(void)
@@ -188,9 +188,9 @@ int main(void)
 	G.AddArc(4, 6);
 	G.AddArc(6, 5);
 
-	vector<int> Topvex = G.Topsort();
+	vector<int> Topovex = G.Toposort();
 
-	for (auto& v : Topvex)
+	for (auto& v : Topovex)
 	{
 		cout << v << " ";
 	}

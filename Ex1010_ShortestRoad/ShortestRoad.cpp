@@ -211,7 +211,7 @@ WeightType Graph::ShortestRoad(int m_start) const
 		{
 			for (bool k : known)
 			{
-				// Found vertex unaccessible
+				// Found vertex inaccessible
 				if (!k)
 				{
 					return -1;
