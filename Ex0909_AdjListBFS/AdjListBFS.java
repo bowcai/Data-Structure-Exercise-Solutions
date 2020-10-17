@@ -37,11 +37,11 @@ class AdjList<E> {
 
     protected static class Vertex<E> {
         public E data;
-        public Arc firstArc;
+        public Arc arcsHead;
 
-        public Vertex(E data, Arc firstArc) {
+        public Vertex(E data, Arc arcsHead) {
             this.data = data;
-            this.firstArc = firstArc;
+            this.arcsHead = arcsHead;
         }
 
         // Initialize the vertex with an head node
@@ -126,7 +126,7 @@ class AdjList<E> {
     public void addArc(int m, int n) {
         checkArcIndex(m, n);
 
-        Arc temp = vertexes.get(m).firstArc.next;
+        Arc temp = vertexes.get(m).arcsHead.next;
 
         while (temp != null) {
             if (temp.adjVex == n) {
@@ -136,12 +136,12 @@ class AdjList<E> {
             temp = temp.next;
         }
 
-        vertexes.get(m).firstArc.next
-                = new Arc(n, vertexes.get(m).firstArc.next);
+        vertexes.get(m).arcsHead.next
+                = new Arc(n, vertexes.get(m).arcsHead.next);
 
         if (!isDirected()) {
-            vertexes.get(n).firstArc.next
-                    = new Arc(m, vertexes.get(n).firstArc.next);
+            vertexes.get(n).arcsHead.next
+                    = new Arc(m, vertexes.get(n).arcsHead.next);
         }
 
         arcNum++;
@@ -151,7 +151,7 @@ class AdjList<E> {
     private void removeArcDirected(int m, int n) {
         checkArcIndex(m, n);
 
-        Arc temp = vertexes.get(m).firstArc;
+        Arc temp = vertexes.get(m).arcsHead;
         while (temp.next != null) {
             if (temp.next.adjVex == n) {
                 Arc former = temp.next;
@@ -190,7 +190,7 @@ class AdjList<E> {
 
             System.out.print(vertexes.get(current).data + " ");
 
-            Arc temp = vertexes.get(current).firstArc.next;
+            Arc temp = vertexes.get(current).arcsHead.next;
             while (temp != null) {
                 if (!visited[temp.adjVex]) {
                     queue.offer(temp.adjVex);
