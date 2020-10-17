@@ -26,8 +26,8 @@ public class AdjListBFS {
 // Graph with Adjacent List
 class AdjList<E> {
     protected static class Arc {
-        public int adjVex;
-        public Arc next;
+        private final int adjVex;
+        private Arc next;
 
         public Arc(int adjVex, Arc next) {
             this.adjVex = adjVex;
@@ -123,10 +123,14 @@ class AdjList<E> {
         }
     }
 
+    protected Vertex<E> getVertex(int index) {
+        return vertexes.get(index);
+    }
+
     public void addArc(int m, int n) {
         checkArcIndex(m, n);
 
-        Arc temp = vertexes.get(m).arcsHead.next;
+        Arc temp = getVertex(m).arcsHead.next;
 
         while (temp != null) {
             if (temp.adjVex == n) {
@@ -136,12 +140,12 @@ class AdjList<E> {
             temp = temp.next;
         }
 
-        vertexes.get(m).arcsHead.next
-                = new Arc(n, vertexes.get(m).arcsHead.next);
+        getVertex(m).arcsHead.next
+                = new Arc(n, getVertex(m).arcsHead.next);
 
         if (!isDirected()) {
-            vertexes.get(n).arcsHead.next
-                    = new Arc(m, vertexes.get(n).arcsHead.next);
+            getVertex(n).arcsHead.next
+                    = new Arc(m, getVertex(n).arcsHead.next);
         }
 
         arcNum++;
@@ -151,7 +155,7 @@ class AdjList<E> {
     private void removeArcDirected(int m, int n) {
         checkArcIndex(m, n);
 
-        Arc temp = vertexes.get(m).arcsHead;
+        Arc temp = getVertex(m).arcsHead;
         while (temp.next != null) {
             if (temp.next.adjVex == n) {
                 Arc former = temp.next;
@@ -188,9 +192,9 @@ class AdjList<E> {
         while (!queue.isEmpty()) {
             int current = queue.remove();
 
-            System.out.print(vertexes.get(current).data + " ");
+            System.out.print(getVertex(current).data + " ");
 
-            Arc temp = vertexes.get(current).arcsHead.next;
+            Arc temp = getVertex(current).arcsHead.next;
             while (temp != null) {
                 if (!visited[temp.adjVex]) {
                     queue.offer(temp.adjVex);
