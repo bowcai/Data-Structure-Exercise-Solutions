@@ -50,9 +50,9 @@ class AdjList<E> {
         }
     }
 
-    protected ArrayList<Vertex<E>> vertexes = new ArrayList<>();
-    private int vexNum = 0;
-    private int arcNum = 0;
+    protected ArrayList<Vertex<E>> vertexes;
+    private int vexNum;
+    private int arcNum;
     private final boolean directed;
 
     // Default to construct an empty undirected graph
@@ -65,12 +65,19 @@ class AdjList<E> {
     }
 
     public AdjList(boolean directed) {
-        this.directed = directed;
+        this(null, directed);
     }
 
     public AdjList(E[] array, boolean directed) {
-        addVertex(array);
         this.directed = directed;
+        makeEmpty();
+        addVertex(array);
+    }
+
+    public void makeEmpty() {
+        vertexes = new ArrayList<>();
+        vexNum = 0;
+        arcNum = 0;
     }
 
     public boolean isDirected() {

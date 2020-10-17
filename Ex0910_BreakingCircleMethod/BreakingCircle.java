@@ -36,11 +36,11 @@ class MyGraph<E> {
     private final boolean directed;
 
     // Data for all vertexes
-    private final E[] vertexes;
+    private E[] vertexes;
 
     // Use int as WeightType
     // Weight of arcs
-    private final int[][] arcs;
+    private int[][] arcs;
 
     // The constant to represent no arc
     public final static int INF = Integer.MAX_VALUE;
@@ -50,13 +50,18 @@ class MyGraph<E> {
         this(vexNum, false);
     }
 
-    @SuppressWarnings("unchecked")
     public MyGraph(int vexNum, boolean directed) {
         this.vexNum = vexNum;
         this.arcNum = 0;
-        this.vertexes = (E[])new Object[vexNum];
-        this.arcs = new int[vexNum][vexNum];
         this.directed = directed;
+
+        makeEmpty();
+    }
+
+    @SuppressWarnings("unchecked")
+    public void makeEmpty() {
+        vertexes = (E[])new Object[vexNum];
+        arcs = new int[vexNum][vexNum];
 
         for (int i = 0; i < vexNum; i++) {
             Arrays.fill(arcs[i], INF);
